@@ -73,4 +73,28 @@ window.addEventListener("scroll", () => {
       link.classList.add("active");
     }
   });
-});
+});// FADE IN ON SCROLL
+const fadeEls = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+fadeEls.forEach(el => observer.observe(el));
+// TYPING EFFECT
+const text = "Crafting High Performance Digital Experiences";
+const typingEl = document.getElementById("typing-text");
+let i = 0;
+
+function typeWriter() {
+  if (i < text.length) {
+    typingEl.innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, 60);
+  }
+}
+
+typeWriter();
