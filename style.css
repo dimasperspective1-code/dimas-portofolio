@@ -34,10 +34,6 @@ body {
   font-weight: 700;
 }
 
-.hex {
-  color: #555;
-}
-
 .dk {
   color: #c77dff;
   font-family: 'Orbitron', sans-serif;
@@ -55,21 +51,8 @@ body {
 }
 
 @keyframes neonFlicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    opacity: 1;
-  }
-  20%, 24%, 55% {
-    opacity: 0.3;
-  }
-}
-
-.cursor {
-  color: #c77dff;
-  animation: cursorBlink 1s infinite;
-}
-
-@keyframes cursorBlink {
-  50% { opacity: 0; }
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.3; }
 }
 
 .nav-links {
@@ -164,20 +147,7 @@ body {
 .role {
   color: #c77dff;
   letter-spacing: 4px;
-  font-
-  .hero-card {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-#orbitCanvas {
-  max-width: 100%;
-  height: auto;
-}
-  size: 14px;
+  font-size: 14px;
 }
 
 h1 {
@@ -238,22 +208,16 @@ h1 {
 }
 
 /* HERO CARD */
-
-
-.tech-card {
-  background: #151515;
-  padding: 20px;
-  border-radius: 15px;
-  text-align: center;
-  transition: 0.3s;
-  font-size: 14px;
+.hero-card {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.tech-card:hover {
-  transform: translateY(-5px);
-  box-shadow:
-    0 0 15px #9d4edd,
-    0 0 30px #9d4edd;
+#orbitCanvas {
+  max-width: 100%;
+  height: auto;
 }
 
 /* SECTION SHARED */
@@ -343,9 +307,7 @@ h1 {
 
 .project-card:hover {
   transform: translateY(-10px) scale(1.02);
-  box-shadow:
-    0 0 20px #9d4edd,
-    0 0 40px rgba(157, 78, 221, 0.4);
+  box-shadow: 0 0 20px #9d4edd, 0 0 40px rgba(157, 78, 221, 0.4);
 }
 
 .project-card h3 {
@@ -492,6 +454,11 @@ h1 {
   }
 
   .hero-card {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #orbitCanvas {
     width: 280px;
     height: 280px;
   }
@@ -515,7 +482,9 @@ h1 {
   .section-title {
     font-size: 32px;
   }
-}/* FADE IN ANIMATION */
+}
+
+/* FADE IN ANIMATION */
 .fade-in {
   opacity: 0;
   transform: translateY(30px);
@@ -527,24 +496,9 @@ h1 {
   transform: translateY(0);
 }
 
-/* TYPING EFFECT */
-.typing {
-  border-right: 3px solid #c77dff;
-  white-space: nowrap;
-  overflow: hidden;
-  width: 0;
-  animation: typing 3s steps(20) forwards, blink 0.7s infinite;
-}
-
-@keyframes typing {
-  to { width: 100%; }
-}
-
-@keyframes blink {
-  50% { border-color: transparent; }
-}
+/* CURSOR BLINK */
 .cursor {
-  color: #ffdbfc;
+  color: white;
   animation: cursorBlink 1s infinite;
 }
 
