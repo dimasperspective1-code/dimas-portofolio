@@ -1,5 +1,10 @@
 console.log("Portfolio Dimas Loaded 🚀");
-
+// LOADING SCREEN
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loadingScreen').classList.add('hidden');
+  }, 2000);
+});
 // =====================
 // EMAILJS INIT
 // Ganti "YOUR_PUBLIC_KEY" dengan Public Key dari dashboard EmailJS kamu
