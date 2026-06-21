@@ -102,7 +102,9 @@ function typeWriter() {
   }
 }
 
-typeWriter();
+window.addEventListener('load', () => {
+  setTimeout(typeWriter, 2000);
+});
 // ORBIT ANIMATION
 const canvas = document.getElementById('orbitCanvas');
 const ctx = canvas.getContext('2d');

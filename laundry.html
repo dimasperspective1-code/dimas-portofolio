@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DKWash | Laundry Express</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background:#fff;
+  color:#1a1d24;
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+}
+a { text-decoration:none; color:inherit; }
+
+.navbar {
+  position:sticky; top:0; left:0; width:100%; padding:18px 60px;
+  display:flex; justify-content:space-between; align-items:center;
+  background:#ffffff; border-bottom:1px solid #f0eefa; z-index:1000;
+}
+.nav-left { display:flex; align-items:center; gap:50px; }
+.logo-block { line-height:1.1; }
+.logo { font-family:'Baloo 2',sans-serif; font-weight:800; font-size:22px; color:#6c3ce0; }
+.logo-sub { font-size:11px; color:#8a8694; font-style:italic; }
+
+.nav-links { display:flex; gap:34px; list-style:none; }
+.nav-links a { font-size:14px; color:#3a3645; font-weight:500; transition:.2s; }
+.nav-links a:hover { color:#6c3ce0; }
+
+.nav-right { display:flex; align-items:center; gap:14px; }
+.view-toggle { display:flex; gap:6px; background:#f4f1fc; padding:4px; border-radius:10px; }
+.view-toggle button {
+  background:transparent; border:none; color:#6c3ce0; padding:8px 16px; border-radius:7px;
+  font-family:'Inter',sans-serif; font-size:12px; font-weight:700; cursor:pointer; transition:.2s;
+}
+.view-toggle button.active { background:#6c3ce0; color:white; }
+
+.reserve-btn {
+  background:#6c3ce0; color:white; padding:11px 22px; border-radius:30px;
+  font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px;
+  transition:.2s; border:none; cursor:pointer;
+}
+.reserve-btn:hover { background:#5a2fc7; }
+
+.back-link { font-size:12px; color:#8a8694; padding:9px 16px; border:1px solid #e9e5f7; border-radius:30px; transition:.2s; }
+.back-link:hover { color:#6c3ce0; border-color:#6c3ce0; }
+
+/* PAGE WRAPPER */
+.page { display:none; }
+.page.active { display:block; animation:fadeUp .4s ease; }
+@keyframes fadeUp { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+/* HERO */
+.hero {
+  background:#f5f2fc;
+  padding:70px 60px 0;
+  display:flex; align-items:flex-end; justify-content:space-between;
+  min-height:600px; gap:30px; overflow:hidden; position:relative;
+}
+.hero-text { max-width:540px; padding-bottom:80px; }
+.hero-title {
+  font-family:'Baloo 2',sans-serif; font-weight:800; font-size:54px; line-height:1.08;
+  color:#2a2438;
+  -webkit-text-stroke: 1.5px #b9a3f0;
+  text-shadow: 3px 3px 0 #d8c9f7;
+}
+.hero-desc { font-size:15px; color:#6a6577; margin-top:22px; line-height:1.7; max-width:420px; }
+.hero-cta { margin-top:28px; display:flex; gap:14px; }
+.btn-primary {
+  background:#6c3ce0; color:white; padding:14px 28px; border-radius:30px;
+  font-size:14px; font-weight:700; border:none; cursor:pointer; transition:.2s;
+}
+.btn-primary:hover { background:#5a2fc7; transform:translateY(-2px); }
+.btn-secondary {
+  background:white; color:#6c3ce0; padding:14px 28px; border-radius:30px;
+  font-size:14px; font-weight:700; border:1.5px solid #6c3ce0; cursor:pointer; transition:.2s;
+}
+.btn-secondary:hover { background:#f4f1fc; }
+
+.hero-visual { position:relative; width:480px; flex-shrink:0; align-self:flex-end; }
+
+.floating-badge {
+  position:absolute; background:white; border-radius:16px; padding:12px 18px;
+  display:flex; align-items:center; gap:12px; box-shadow:0 8px 24px rgba(108,60,224,.12);
+  font-size:13px; font-weight:700; color:#2a2438; animation:float 3.5s ease-in-out infinite;
+}
+.badge-icon { width:38px; height:38px; border-radius:50%; background:#6c3ce0; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.badge-1 { top:30px; left:-10px; animation-delay:0s; }
+.badge-2 { top:140px; left:60px; animation-delay:.5s; }
+.badge-3 { top:250px; left:-20px; animation-delay:1s; }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+
+/* STATS STRIP */
+.stats-strip {
+  background:white; display:flex; justify-content:center; gap:60px;
+  padding:26px 40px; border-top:1px solid #f0eefa; flex-wrap:wrap;
+}
+.stat-item { text-align:center; }
+.stat-num { font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; color:#6c3ce0; }
+.stat-lbl { font-size:11px; color:#8a8694; margin-top:2px; font-weight:600; letter-spacing:0.3px; }
+
+/* SECTION */
+.section { padding:70px 60px; max-width:1200px; margin:0 auto; }
+.section-eyebrow { font-size:12px; font-weight:700; color:#6c3ce0; letter-spacing:1px; text-transform:uppercase; }
+.section-title { font-family:'Baloo 2',sans-serif; font-weight:700; font-size:32px; color:#2a2438; margin-top:8px; }
+.section-desc { font-size:14px; color:#6a6577; margin-top:10px; max-width:520px; }
+
+/* SERVICE GRID */
+.service-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:36px; }
+.service-card {
+  background:#f9f7fd; border:1.5px solid #f0eefa; border-radius:18px; padding:22px;
+  cursor:pointer; transition:.2s;
+}
+.service-card:hover { border-color:#cdbaf2; transform:translateY(-3px); }
+.service-card.selected { border-color:#6c3ce0; background:#f4f1fc; box-shadow:0 6px 18px rgba(108,60,224,.12); }
+.service-icon-circle { width:46px; height:46px; border-radius:14px; background:#6c3ce0; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; margin-bottom:14px; }
+.service-name { font-weight:700; font-size:14px; color:#2a2438; }
+.service-desc-sm { font-size:11px; color:#8a8694; margin-top:5px; }
+.service-price { font-size:13px; color:#6c3ce0; margin-top:14px; font-weight:800; }
+
+/* ORDER FORM SECTION */
+.order-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:30px; margin-top:36px; }
+.order-card { background:white; border:1.5px solid #f0eefa; border-radius:20px; padding:28px; box-shadow:0 4px 20px rgba(108,60,224,.06); }
+.field { margin-top:18px; }
+.field:first-child { margin-top:0; }
+.field label { font-size:12px; color:#6a6577; font-weight:700; display:block; margin-bottom:7px; }
+.field input, .field select {
+  width:100%; background:#f9f7fd; border:1.5px solid #f0eefa; color:#2a2438;
+  padding:13px 16px; border-radius:12px; font-family:'Inter',sans-serif; font-size:13px; outline:none;
+}
+.field input:focus { border-color:#6c3ce0; background:white; }
+.weight-row { display:flex; align-items:center; gap:14px; }
+.weight-row input[type=range] { flex:1; accent-color:#6c3ce0; }
+.weight-val { font-size:14px; color:#6c3ce0; font-weight:800; min-width:50px; text-align:right; }
+
+.summary-card { background:#2a2438; border-radius:20px; padding:26px; color:white; }
+.summary-card .card-title { color:white; font-size:14px; font-weight:700; margin-bottom:16px; }
+.summary-row { display:flex; justify-content:space-between; font-size:13px; color:#cdc6e6; padding:8px 0; }
+.summary-total { display:flex; justify-content:space-between; margin-top:10px; padding-top:16px; border-top:1px solid #423a5c; }
+.summary-total span:first-child { font-weight:600; color:white; }
+.summary-total span:last-child { color:#b9a3f0; font-weight:800; font-size:22px; }
+.submit-btn {
+  width:100%; margin-top:20px; padding:14px; background:#6c3ce0; color:white; border:none;
+  border-radius:14px; font-family:'Inter',sans-serif; font-weight:700; font-size:14px; cursor:pointer; transition:.2s;
+}
+.submit-btn:hover { background:#7d4cf0; }
+.submit-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+.status-empty { text-align:center; color:#a3aab8; font-size:13px; padding:30px 10px; }
+.order-track { border:1.5px solid #f0eefa; border-radius:14px; padding:16px; margin-top:14px; background:#f9f7fd; }
+.order-track-top { display:flex; justify-content:space-between; align-items:center; }
+.order-id { font-size:11px; color:#a3aab8; }
+.order-track-service { font-size:13px; font-weight:700; margin-top:4px; color:#2a2438; }
+.badge-status { font-size:10px; padding:5px 10px; border-radius:20px; font-weight:700; }
+.badge-status.received { background:#e9e3fb; color:#6c3ce0; }
+.badge-status.washing { background:#fdf1de; color:#c98a14; }
+.badge-status.ready { background:#e3f9ec; color:#1f9d55; }
+.badge-status.done { background:#eceef2; color:#767e8c; }
+.progress-track { height:5px; background:#ece6fa; border-radius:4px; margin-top:12px; overflow:hidden; }
+.progress-fill { height:100%; background:#6c3ce0; border-radius:4px; transition:width .4s ease; }
+
+/* ADMIN */
+.admin-section { padding:50px 60px; max-width:1200px; margin:0 auto; }
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:28px; }
+.stat-card { background:#f9f7fd; border:1.5px solid #f0eefa; border-radius:16px; padding:20px; }
+.stat-label { font-size:11px; color:#8a8694; font-weight:700; }
+.stat-value { font-family:'Baloo 2',sans-serif; font-size:28px; font-weight:800; color:#2a2438; margin-top:8px; }
+.stat-value.purple { color:#6c3ce0; }
+
+.admin-table-wrap { margin-top:28px; background:white; border:1.5px solid #f0eefa; border-radius:18px; padding:6px; overflow-x:auto; }
+table { width:100%; border-collapse:collapse; min-width:680px; }
+th { text-align:left; font-size:11px; color:#8a8694; font-weight:700; padding:14px 16px; border-bottom:1px solid #f4f1fc; }
+td { padding:14px 16px; font-size:13px; border-bottom:1px solid #f4f1fc; color:#2a2438; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#f9f7fd; }
+.status-select { background:#f9f7fd; border:1.5px solid #f0eefa; color:#2a2438; padding:6px 10px; border-radius:8px; font-size:12px; outline:none; cursor:pointer; font-weight:600; }
+.admin-empty { text-align:center; color:#a3aab8; padding:50px; font-size:13px; }
+
+@media (max-width:1000px){
+  .nav-links, .nav-left { gap:20px; }
+  .nav-links { display:none; }
+  .navbar { padding:14px 20px; }
+  .hero { flex-direction:column; padding:40px 24px 0; align-items:center; text-align:center; }
+  .hero-text { padding-bottom:30px; max-width:100%; }
+  .hero-title { font-size:34px; }
+  .hero-visual { width:100%; max-width:320px; height:220px; }
+  .floating-badge { position:static; margin-bottom:10px; animation:none; }
+  .hero-cta { justify-content:center; flex-wrap:wrap; }
+  .stats-strip { gap:30px; padding:20px; }
+  .section, .admin-section { padding:50px 24px; }
+  .service-grid { grid-template-columns:repeat(2,1fr); }
+  .order-grid { grid-template-columns:1fr; }
+  .stat-grid { grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="logo-block">
+      <div class="logo">DKWash</div>
+      <div class="logo-sub">Laundry Express</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#home" onclick="switchView('customer');return false;">Beranda</a></li>
+      <li><a href="#" onclick="return false;">Outlet</a></li>
+      <li><a href="#" onclick="switchView('admin');return false;">Cek Status Cucianmu</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <div class="view-toggle">
+      <button id="btnCustomer" class="active" onclick="switchView('customer')">Order</button>
+      <button id="btnAdmin" onclick="switchView('admin')">Admin</button>
+    </div>
+    <a href="index.html" class="back-link">← Portfolio</a>
+  </div>
+</nav>
+
+<section id="customerPage" class="page active">
+
+  <div class="hero" id="home">
+    <div class="hero-text">
+      <div class="hero-title">No.1 Laundry<br>Express di<br>Indonesia</div>
+      <div class="hero-desc">Cucian kamu dijemput, dicuci sampai bersih, dan diantar balik secepat mungkin. Tinggal pilih layanan, kami yang urus sisanya.</div>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="document.getElementById('orderSection').scrollIntoView({behavior:'smooth'})">Order sekarang</button>
+        <button class="btn-secondary" onclick="switchView('admin')">Cek status cucianmu</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-badge badge-1">
+        <div class="badge-icon">⏱</div>
+        Pickup dalam 30 menit
+      </div>
+      <div class="floating-badge badge-2">
+        <div class="badge-icon">💰</div>
+        Mulai dari Rp 8.000
+      </div>
+      <div class="floating-badge badge-3">
+        <div class="badge-icon">⚡</div>
+        Express 3 jam selesai
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-item"><div class="stat-num">12K+</div><div class="stat-lbl">Cucian selesai</div></div>
+    <div class="stat-item"><div class="stat-num">98%</div><div class="stat-lbl">Pelanggan puas</div></div>
+    <div class="stat-item"><div class="stat-num">3 jam</div><div class="stat-lbl">Express tercepat</div></div>
+    <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-lbl">Rating outlet</div></div>
+  </div>
+
+  <div class="section" id="orderSection">
+    <div class="section-eyebrow">Layanan</div>
+    <div class="section-title">Pilih jenis cucianmu</div>
+    <div class="section-desc">Semua layanan dihitung per kilogram, harga sudah termasuk deterjen dan pewangi standar.</div>
+    <div class="service-grid" id="serviceGrid"></div>
+  </div>
+
+  <div class="section" style="padding-top:0;">
+    <div class="order-grid">
+      <div class="order-card">
+        <div class="card-title" style="font-weight:700;font-size:15px;color:#2a2438;margin-bottom:18px;">Detail pesanan</div>
+
+        <div class="field">
+          <label>BERAT CUCIAN (KG)</label>
+          <div class="weight-row">
+            <input type="range" id="weightSlider" min="1" max="15" value="3" oninput="updateWeight()"/>
+            <div class="weight-val" id="weightVal">3 kg</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>NAMA KAMU</label>
+          <input type="text" id="custName" placeholder="cth. Dimas Kurnianto"/>
+        </div>
+
+        <div class="field">
+          <label>TANGGAL PICKUP</label>
+          <input type="date" id="pickupDate"/>
+        </div>
+      </div>
+
+      <div>
+        <div class="summary-card">
+          <div class="card-title">Ringkasan</div>
+          <div class="summary-row"><span>Layanan</span><span id="sumService">—</span></div>
+          <div class="summary-row"><span>Berat</span><span id="sumWeight">3 kg</span></div>
+          <div class="summary-row"><span>Harga satuan</span><span id="sumRate">—</span></div>
+          <div class="summary-total"><span>Total</span><span id="sumTotal">Rp 0</span></div>
+          <button class="submit-btn" id="orderBtn" onclick="placeOrder()" disabled>Order sekarang</button>
+        </div>
+
+        <div id="customerOrdersWrap">
+          <div class="status-empty">Belum ada pesanan. Order sekarang untuk mulai melacak cucianmu.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section id="adminPage" class="page">
+  <div class="admin-section">
+    <div class="section-eyebrow">Dashboard</div>
+    <div class="section-title">Status semua cucian</div>
+    <div class="section-desc">Pantau setiap pesanan yang masuk, dari diterima sampai diambil pelanggan.</div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">TOTAL PESANAN</div><div class="stat-value" id="statTotal">0</div></div>
+      <div class="stat-card"><div class="stat-label">SEDANG DICUCI</div><div class="stat-value purple" id="statProgress">0</div></div>
+      <div class="stat-card"><div class="stat-label">SIAP DIAMBIL</div><div class="stat-value" id="statReady">0</div></div>
+      <div class="stat-card"><div class="stat-label">PENDAPATAN HARI INI</div><div class="stat-value purple" id="statRevenue">Rp 0</div></div>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table>
+        <thead><tr><th>ID PESANAN</th><th>NAMA</th><th>LAYANAN</th><th>BERAT</th><th>TOTAL</th><th>PICKUP</th><th>STATUS</th></tr></thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+      <div id="adminEmpty" class="admin-empty">Belum ada pesanan masuk.</div>
+    </div>
+  </div>
+</section>
+
+<script>
+const SERVICES = [
+  { id:'wash', name:'Cuci Lipat', desc:'Cuci, kering, lipat rapi', rate:8000, icon:'👕' },
+  { id:'iron', name:'Cuci Setrika', desc:'Cuci, kering, disetrika', rate:12000, icon:'👔' },
+  { id:'dry', name:'Dry Clean', desc:'Untuk bahan halus & jas', rate:18000, icon:'🧥' },
+  { id:'express', name:'Express 3 Jam', desc:'Selesai super cepat', rate:20000, icon:'⚡' },
+];
+
+const STAGES = ['received','washing','ready','done'];
+const STAGE_LABEL = { received:'Diterima', washing:'Dicuci', ready:'Siap diambil', done:'Selesai' };
+
+let orders = [];
+let selectedService = null;
+let orderCounter = 1;
+
+function switchView(view){
+  document.getElementById('customerPage').classList.toggle('active', view==='customer');
+  document.getElementById('adminPage').classList.toggle('active', view==='admin');
+  document.getElementById('btnCustomer').classList.toggle('active', view==='customer');
+  document.getElementById('btnAdmin').classList.toggle('active', view==='admin');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(view==='admin') renderAdmin();
+}
+
+function renderServices(){
+  const grid = document.getElementById('serviceGrid');
+  grid.innerHTML = SERVICES.map(s => `
+    <div class="service-card" data-id="${s.id}" onclick="selectService('${s.id}')">
+      <div class="service-icon-circle">${s.icon}</div>
+      <div class="service-name">${s.name}</div>
+      <div class="service-desc-sm">${s.desc}</div>
+      <div class="service-price">Rp ${s.rate.toLocaleString('id-ID')}/kg</div>
+    </div>
+  `).join('');
+}
+
+function selectService(id){
+  selectedService = SERVICES.find(s => s.id === id);
+  document.querySelectorAll('.service-card').forEach(el => {
+    el.classList.toggle('selected', el.dataset.id === id);
+  });
+  updateSummary();
+}
+
+function updateWeight(){
+  const w = document.getElementById('weightSlider').value;
+  document.getElementById('weightVal').textContent = w + ' kg';
+  updateSummary();
+}
+
+function updateSummary(){
+  const weight = Number(document.getElementById('weightSlider').value);
+  document.getElementById('sumWeight').textContent = weight + ' kg';
+  if(selectedService){
+    document.getElementById('sumService').textContent = selectedService.name;
+    document.getElementById('sumRate').textContent = `Rp ${selectedService.rate.toLocaleString('id-ID')}/kg`;
+    document.getElementById('sumTotal').textContent = `Rp ${(selectedService.rate*weight).toLocaleString('id-ID')}`;
+  } else {
+    document.getElementById('sumService').textContent = '—';
+    document.getElementById('sumRate').textContent = '—';
+    document.getElementById('sumTotal').textContent = 'Rp 0';
+  }
+  validateForm();
+}
+
+function validateForm(){
+  const name = document.getElementById('custName').value.trim();
+  const date = document.getElementById('pickupDate').value;
+  document.getElementById('orderBtn').disabled = !(selectedService && name && date);
+}
+
+document.getElementById('custName').addEventListener('input', validateForm);
+document.getElementById('pickupDate').addEventListener('change', validateForm);
+
+function placeOrder(){
+  const weight = Number(document.getElementById('weightSlider').value);
+  const name = document.getElementById('custName').value.trim();
+  const date = document.getElementById('pickupDate').value;
+  const total = selectedService.rate * weight;
+
+  orders.push({ id:'DKW-'+String(orderCounter++).padStart(3,'0'), name, service:selectedService.name, weight, total, date, stageIndex:0 });
+
+  renderCustomerOrders();
+  renderAdmin();
+
+  document.getElementById('custName').value = '';
+  document.getElementById('pickupDate').value = '';
+  selectedService = null;
+  document.querySelectorAll('.service-card').forEach(el => el.classList.remove('selected'));
+  document.getElementById('weightSlider').value = 3;
+  updateWeight();
+}
+
+function renderCustomerOrders(){
+  const wrap = document.getElementById('customerOrdersWrap');
+  if(orders.length === 0){
+    wrap.innerHTML = '<div class="status-empty">Belum ada pesanan. Order sekarang untuk mulai melacak cucianmu.</div>';
+    return;
+  }
+  wrap.innerHTML = orders.slice().reverse().map(o => {
+    const stage = STAGES[o.stageIndex];
+    const pct = ((o.stageIndex+1)/STAGES.length)*100;
+    return `
+      <div class="order-track">
+        <div class="order-track-top">
+          <div><div class="order-id">${o.id} · ${o.name}</div><div class="order-track-service">${o.service} · ${o.weight}kg</div></div>
+          <span class="badge-status ${stage}">${STAGE_LABEL[stage]}</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>`;
+  }).join('');
+}
+
+function renderAdmin(){
+  const tbody = document.getElementById('adminTableBody');
+  const emptyMsg = document.getElementById('adminEmpty');
+
+  document.getElementById('statTotal').textContent = orders.length;
+  document.getElementById('statProgress').textContent = orders.filter(o => o.stageIndex===1).length;
+  document.getElementById('statReady').textContent = orders.filter(o => o.stageIndex===2).length;
+  document.getElementById('statRevenue').textContent = 'Rp ' + orders.reduce((s,o)=>s+o.total,0).toLocaleString('id-ID');
+
+  if(orders.length === 0){ tbody.innerHTML=''; emptyMsg.style.display='block'; return; }
+  emptyMsg.style.display = 'none';
+
+  tbody.innerHTML = orders.slice().reverse().map(o => `
+    <tr>
+      <td>${o.id}</td><td>${o.name}</td><td>${o.service}</td><td>${o.weight} kg</td>
+      <td>Rp ${o.total.toLocaleString('id-ID')}</td><td>${o.date}</td>
+      <td><select class="status-select" onchange="updateStage('${o.id}', this.selectedIndex)">
+        ${STAGES.map((s,i) => `<option value="${i}" ${i===o.stageIndex?'selected':''}>${STAGE_LABEL[s]}</option>`).join('')}
+      </select></td>
+    </tr>`).join('');
+}
+
+function updateStage(id, index){
+  const order = orders.find(o => o.id === id);
+  if(order){ order.stageIndex = index; renderCustomerOrders(); renderAdmin(); }
+}
+
+renderServices();
+const todayInput = document.getElementById('pickupDate');
+todayInput.min = new Date().toISOString().split('T')[0];
+</script>
+
+</body>
+</html>
